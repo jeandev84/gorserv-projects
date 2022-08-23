@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\VacationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+*/
+
+
+# Routes for my api version 1 :
+Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
+
+     Route::apiResources([
+          'vacations' => VacationController::class
+     ]);
 });
