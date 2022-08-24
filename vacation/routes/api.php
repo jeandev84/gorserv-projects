@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VacationApprovalController;
 use App\Http\Controllers\Api\V1\VacationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,11 +27,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 
-# Routes for my api version 1 :
-Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
+# Routes for api ( version 1 ) :
+Route::group(['prefix' => 'v1'], function () {
 
      Route::apiResources([
-          'vacationapprovals' => VacationApprovalController::class,
-          'vacations'         => VacationController::class
+          'users'              => UserController::class,
+          'vacations'          => VacationController::class,
+          'vacationapprovals'  => VacationApprovalController::class,
      ]);
+});
+
+
+# Authentication routes
+Route::group(['prefix' => 'auth'], function () {
+
+    Route::post('/login', [LoginController::class, 'index']);
+    Route::post('/logout', [LogoutController::class, 'index']);
+    Route::get('/profile', [ProfileController::class, 'index']);
+
 });

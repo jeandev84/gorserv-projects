@@ -23,7 +23,7 @@ class CreateVacationApprovalsTable extends Migration
             $table->id();
 
 
-            // первичный ключ (id) из таблицы пользователей (users)
+            // id пользователя из таблицы (users), которого agreed_by_id будет согласовать
             $table->foreignId('user_id')
                   ->constrained()
                   ->onDelete('cascade');
@@ -35,12 +35,12 @@ class CreateVacationApprovalsTable extends Migration
                   ->onDelete('cascade');
 
 
-            // результат согласования (approve/decline) ...
+            // результат согласования (approve/decline)
             $table->string('result_approval', 100);
 
 
-            // идентификатор пользователя ( кто согласовал )
-            $table->bigInteger('member_id');
+            // идентификатор пользователя кто согласовал
+            $table->bigInteger('agreed_by_id');
 
 
             // указываем уникальные ключи
@@ -52,11 +52,12 @@ class CreateVacationApprovalsTable extends Migration
         });
     }
 
+
     /**
      * Reverse the migrations.
      *
      * @return void
-     */
+    */
     public function down()
     {
         Schema::dropIfExists('vacation_approvals');

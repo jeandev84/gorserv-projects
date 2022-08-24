@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Vacation\VacationStoreRequest;
-use App\Http\Requests\Vacation\VacationUpdateRequest;
+use App\Http\Requests\Vacations\VacationStoreRequest;
+use App\Http\Requests\Vacations\VacationUpdateRequest;
+use App\Http\Resources\VacationResource;
 use App\Models\Vacation;
+use Illuminate\Http\Response;
 
 
 /**
@@ -21,7 +23,20 @@ class VacationController extends Controller
     */
     public function index()
     {
-        // TODO implements
+        return VacationResource::collection(
+            Vacation::orderBy('created_at', 'desc')->get()
+        );
+    }
+
+
+
+    /**
+     * @param $userId
+     * @return mixed
+    */
+    public function getVacationByUserId($userId)
+    {
+         return Vacation::where('user_id', $userId)->get();
     }
 
 
@@ -34,8 +49,20 @@ class VacationController extends Controller
     */
     public function store(VacationStoreRequest $request)
     {
-        // TODO implements
+         // Получаем id авторизован пользователя, который хочет записаться на отпуск
+         $user_id = auth()->id() ?? $request->user_id;
+
+         // объединяем все параметры для создания записи
+         $credentials = array_merge($request->validated(), compact('user_id'));
+
+         // создание отпуска
+         $vacation = Vacation::create($credentials);
+
+         // возвращаем запись, которая только что создали
+         return new VacationResource($vacation);
     }
+
+
 
 
 
@@ -45,10 +72,10 @@ class VacationController extends Controller
      *
      * @param  Vacation $vacation
      * @return \Illuminate\Http\Response
-     */
+    */
     public function show(Vacation $vacation)
     {
-        // TODO implements
+         return new VacationResource($vacation);
     }
 
 
@@ -60,10 +87,12 @@ class VacationController extends Controller
      * @param VacationUpdateRequest $request
      * @param  Vacation $vacation
      * @return \Illuminate\Http\Response
-     */
+    */
     public function update(VacationUpdateRequest $request, Vacation $vacation)
     {
-        //
+         $vacation->update($request->validated());
+
+         return new VacationResource($vacation);
     }
 
 
@@ -76,6 +105,8 @@ class VacationController extends Controller
     */
     public function destroy(Vacation $vacation)
     {
-        //
+         $vacation->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

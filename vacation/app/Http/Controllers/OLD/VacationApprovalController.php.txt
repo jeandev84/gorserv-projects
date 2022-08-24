@@ -87,23 +87,24 @@ class VacationApprovalController extends Controller
     public function update(VacationUpdateRequest $request, VacationApproval $vacationApproval)
     {
 
-        /*
-            [
-              'user_id' => int,
-              'updates' => [
-                  [
-                    'id' => null | int,  // из таблицы отпусков - добавить новую строку или обновить имеющуюся,
-                    'date_start_at' => date:Y-m-d,
-                    'date_end_at' => date:Y-m-d,
-                  ],
-                  [
-                    'id' => null | int,  // из таблицы отпусков - добавить новую строку или обновить имеющуюся,
-                    'date_start_at' => date:Y-m-d,
-                    'date_end_at' => date:Y-m-d,
-                  ],
-                ],
-                'agreed_by_id' => 37,
-                'deletes' => [int, int, ....]  // id записей, которые надо удалить
+             // TODO Refactoring and clean up code.
+             /*
+              [
+                   'user_id' => int,
+                   'updates' => [
+                        [
+                          'id' => null | int,  // из таблицы отпусков - добавить новую строку или обновить имеющуюся,
+                          'date_start_at' => date:Y-m-d,
+                          'date_end_at' => date:Y-m-d,
+                        ],
+                        [
+                          'id' => null | int,  // из таблицы отпусков - добавить новую строку или обновить имеющуюся,
+                          'date_start_at' => date:Y-m-d,
+                          'date_end_at' => date:Y-m-d,
+                        ],
+                   ],
+                   'agreed_by_id' => 37,
+                   'deletes' => [int, int, ....]  // id записей, которые надо удалить
               ];
            */
 
@@ -111,15 +112,40 @@ class VacationApprovalController extends Controller
 
            // Удаляем все записи из списка "deletes"
            if ($ids = $request->deletes) {
-                $this->vacationManager->removeCollectionByUserId($user_id, $ids);
+               Vacation::where('user_id', $user_id)
+                       ->whereIn('id', $ids)
+                       ->delete();
            }
 
 
            // Обновляем или создаем отпуски для user_id
            if($vacations = $request->updates) {
+
                 foreach ($vacations as $credentials) {
-                   // $credentials = array_merge($credentials, compact('user_id'));
-                   $this->vacationManager->saveOnly($credentials, $request->deletes);
+
+                     $date_start_at = $credentials['date_start_at'];
+                     $date_end_at   = $credentials['date_end_at'];
+
+                     if (! empty($credentials['id']) && ! in_array($credentials['id'], $request->deletes)) {
+
+                         $id = $credentials['id'];
+
+                         /** @var Vacation $vacation */
+                         $vacation = Vacation::where('id', $id)
+                                              ->where('user_id', $user_id)
+                                              ->first();
+
+                         $vacation->update(
+                             compact('user_id', 'date_start_at', 'date_end_at')
+                         );
+
+                     }else{ // если id === null, то создаём новую запись
+
+                          Vacation::create(
+                             compact('user_id', 'date_start_at', 'date_end_at')
+                          );
+                     }
+
                 }
            }
 

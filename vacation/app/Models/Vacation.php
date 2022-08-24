@@ -9,5 +9,9 @@ class Vacation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'date_start_at', 'date_end_at'];
+    protected $fillable = [
+        'user_id',
+        'date_start_at',
+        'date_end_at'
+    ];
 }
