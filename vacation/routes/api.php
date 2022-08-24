@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\VacationApprovalController;
 use App\Http\Controllers\Api\V1\VacationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
 
      Route::apiResources([
-          'vacations' => VacationController::class
+          'vacationapprovals' => VacationApprovalController::class,
+          'vacations'         => VacationController::class
      ]);
 });

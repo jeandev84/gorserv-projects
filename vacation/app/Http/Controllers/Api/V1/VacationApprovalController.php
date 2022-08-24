@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vacation\VacationStoreRequest;
 use App\Http\Requests\Vacation\VacationUpdateRequest;
-use App\Models\Vacation;
+use App\Models\VacationApproval;
+use Illuminate\Http\Response;
 
 
 /**
  *
 */
-class VacationController extends Controller
+class VacationApprovalController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +21,7 @@ class VacationController extends Controller
     */
     public function index()
     {
-        // TODO implements
+        //
     }
 
 
@@ -29,9 +29,9 @@ class VacationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param VacationStoreRequest $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function store(VacationStoreRequest $request)
     {
         // TODO implements
@@ -39,29 +39,26 @@ class VacationController extends Controller
 
 
 
-
     /**
      * Display the specified resource.
      *
-     * @param  Vacation $vacation
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Vacation $vacation)
+     * @param VacationApproval $vacationApproval
+     * @return Response
+    */
+    public function show(VacationApproval $vacationApproval)
     {
-        // TODO implements
+        //
     }
-
-
 
 
     /**
      * Update the specified resource in storage.
      *
      * @param VacationUpdateRequest $request
-     * @param  Vacation $vacation
-     * @return \Illuminate\Http\Response
+     * @param VacationApproval $vacationApproval
+     * @return Response
      */
-    public function update(VacationUpdateRequest $request, Vacation $vacation)
+    public function update(VacationUpdateRequest $request, VacationApproval $vacationApproval)
     {
         //
     }
@@ -71,10 +68,10 @@ class VacationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param
-     * @return \Illuminate\Http\Response
+     * @param VacationApproval $vacationApproval
+     * @return Response
     */
-    public function destroy(Vacation $vacation)
+    public function destroy(VacationApproval $vacationApproval)
     {
         //
     }

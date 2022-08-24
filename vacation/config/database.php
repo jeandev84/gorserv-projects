@@ -72,7 +72,7 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
+            'prefix' => '95e18d284cd1a6a_', // хэш для зашиты таблицы
             'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
