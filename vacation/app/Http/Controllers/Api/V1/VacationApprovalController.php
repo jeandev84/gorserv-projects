@@ -8,6 +8,7 @@ use App\Http\Resources\VacationApprovalResource;
 use App\Manager\VacationManager;
 use App\Models\Vacation;
 use App\Models\VacationApproval;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 
@@ -131,8 +132,6 @@ class VacationApprovalController extends Controller
 
 
 
-
-
     /**
      * Remove the specified resource from storage.
      *
@@ -153,6 +152,41 @@ class VacationApprovalController extends Controller
     public function getResultApprovals(): array
     {
          return VacationApproval::RESULTS;
+    }
+
+
+
+    public function approve(Request $request)
+    {
+        /*
+          'id' : ID отпуска
+          'result_approval' : Результат согласования
+        */
+        $id = $request->id;
+
+        $vacation = Vacation::find($id);
+
+        if (! $vacation) {
+             return \response()->json([
+                 'status' => false,
+                 'message' => sprintf('Не найдена отпуск с идентификатором (%s)', $id)],
+                 Response::HTTP_BAD_REQUEST
+             );
+        }
+
+        $vacationApproval = VacationApproval::where('user_id', auth()->id())->first();
+
+        $credentials = [
+            'user_id'         => $vacation->user_id,
+            'vacation_id'     => $vacation->id,
+            'result_approval' => $request->result_approval,
+            'agreed_by_id'    => auth()->id()
+        ];
+
+        $vacationApproval = VacationApproval::where('id', $vacationApproval->id)->update($credentials);
+
+
+        return new VacationApprovalResource($vacationApproval);
     }
 
 }
