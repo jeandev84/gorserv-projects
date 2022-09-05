@@ -172,7 +172,7 @@ class VacationApprovalController extends Controller
         if (! $vacation) {
              return \response()->json([
                  'status' => false,
-                 'message' => sprintf('Не найдена отпуск с идентификатором (%s)', $id)],
+                 'message' => sprintf('Не найден отпуск с идентификатором (%s)', $id)],
                  Response::HTTP_BAD_REQUEST
              );
         }
