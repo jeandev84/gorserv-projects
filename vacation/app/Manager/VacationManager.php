@@ -15,7 +15,7 @@ class VacationManager
      * @param array $ids
      * @return mixed
     */
-    public function removeCollectionByUserId(int $userId, array $ids)
+    public function removeCollectionById(int $userId, array $ids)
     {
         return \App\Models\Vacation::where('user_id', $userId)
                                      ->whereIn('id', $ids)

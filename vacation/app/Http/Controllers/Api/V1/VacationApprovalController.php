@@ -112,7 +112,7 @@ class VacationApprovalController extends Controller
 
            // Удаляем все записи из списка "deletes"
            if ($ids = $request->deletes) {
-                $this->vacationManager->removeCollectionByUserId($user_id, $ids);
+                $this->vacationManager->removeCollectionById($user_id, $ids);
            }
 
 
