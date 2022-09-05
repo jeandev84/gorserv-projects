@@ -156,7 +156,7 @@ class VacationApprovalController extends Controller
 
 
 
-    public function approve(Request $request)
+    public function approveVacation(Request $request)
     {
         // TODO  Refactoring may be later
         /*
