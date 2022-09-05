@@ -158,13 +158,16 @@ class VacationApprovalController extends Controller
 
     public function approve(Request $request)
     {
+        // TODO  Refactoring may be later
         /*
-          'id' : ID отпуска
+          'id' : ID Согласование отпуска
+          'vacation_id' : ID отпуска
           'result_approval' : Результат согласования
         */
+
         $id = $request->id;
 
-        $vacation = Vacation::find($id);
+        $vacation = Vacation::find($request->vacation_id);
 
         if (! $vacation) {
              return \response()->json([
@@ -174,7 +177,7 @@ class VacationApprovalController extends Controller
              );
         }
 
-        $vacationApproval = VacationApproval::where('user_id', auth()->id())->first();
+        $vacationApproval = VacationApproval::where('id', $request->id)->first();
 
         $credentials = [
             'user_id'         => $vacation->user_id,
@@ -183,7 +186,9 @@ class VacationApprovalController extends Controller
             'agreed_by_id'    => auth()->id()
         ];
 
-        $vacationApproval = VacationApproval::where('id', $vacationApproval->id)->update($credentials);
+        // VacationApproval::where('id', $request->id)->update($credentials);
+
+        $vacationApproval->update($credentials);
 
 
         return new VacationApprovalResource($vacationApproval);
