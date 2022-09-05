@@ -165,23 +165,32 @@ class VacationApprovalController extends Controller
           'result_approval' : Результат согласования
         */
 
-        $id = $request->id;
+        $vacationApproval = VacationApproval::find($request->id);
 
-        $vacation = Vacation::find($request->vacation_id);
+        if (! $vacationApproval) {
+            return \response()->json([
+                'status' => false,
+                'message' => 'Запись не найдена'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $idv = $request->vacation_id;
+
+        $vacation = Vacation::find($idv);
 
         if (! $vacation) {
              return \response()->json([
                  'status' => false,
-                 'message' => sprintf('Не найден отпуск с идентификатором (%s)', $id)],
+                 'message' => sprintf('Не найден отпуск с идентификатором (%s)', $idv)],
                  Response::HTTP_BAD_REQUEST
              );
         }
 
-        $vacationApproval = VacationApproval::where('id', $request->id)->first();
-
         $credentials = [
             'user_id'         => $vacation->user_id,
-            'vacation_id'     => $vacation->id,
+            'vacation_id'     => $idv,
             'result_approval' => $request->result_approval,
             'agreed_by_id'    => auth()->id()
         ];
